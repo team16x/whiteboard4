@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whiteboard Capture System</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Whiteboard Capture System</h1>
+            <div class="header-buttons">
+                <button id="refresh" class="btn-outline">↻ Refresh</button>
+                <button id="download-zip" class="btn-primary">⇩ ZIP</button>
+                <button id="download-pdf" class="btn-primary">⇩ PDF</button>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div id="image-detail" class="hidden fade-in">
+            <img id="large-image" alt="Captured Image">
+        </div>
+        <div class="control-panel">
+            <div class="navigation-buttons">
+                <button id="prev" class="btn-outline">←</button>
+                <button id="next" class="btn-outline">→</button>
+            </div>
+            <div class="action-buttons">
+                <button id="save" class="btn-primary">Download Image</button>
+                <button id="fullscreen" class="btn-outline">⤢</button>
+                <button id="delete" class="btn-danger">Delete Image</button>
+            </div>
+        </div>
+        <div id="image-reel"></div>
+    </main>
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</body>
+</html>

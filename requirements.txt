@@ -1,0 +1,6 @@
+flask
+reportlab
+requests
+cloudinary
+python-dotenv
+gunicorn

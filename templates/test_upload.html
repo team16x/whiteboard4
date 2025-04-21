@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Image Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .upload-form {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        img {
+            max-width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .nav {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Cloudinary Image Upload</h1>
+    
+    <div class="upload-form">
+        <h2>Upload an Image</h2>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div>
+                <input type="file" id="imageFile" name="image" accept="image/*" required>
+            </div>
+            <div style="margin-top: 10px;">
+                <button type="submit">Upload</button>
+            </div>
+        </form>
+    </div>
+    
+    <div id="uploadResult" class="result">
+        <h3>Upload Result</h3>
+        <div id="resultContent"></div>
+    </div>
+    
+    <div id="imagePreview" style="margin-top: 20px; display: none;">
+        <h3>Uploaded Image Preview</h3>
+        <img id="previewImg" src="" alt="Uploaded image">
+    </div>
+    
+    <div class="nav">
+        <p><a href="/">Back to Main Page</a> | <a href="/test-cloudinary-page">Test Cloudinary Connection</a></p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const uploadForm = document.getElementById('uploadForm');
+            const resultDiv = document.getElementById('uploadResult');
+            const resultContent = document.getElementById('resultContent');
+            const imagePreview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+            
+            uploadForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const formData = new FormData(uploadForm);
+                
+                try {
+                    resultDiv.className = 'result';
+                    resultContent.innerHTML = 'Uploading...';
+                    resultDiv.style.display = 'block';
+                    imagePreview.style.display = 'none';
+                    
+                    const response = await fetch('/api/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        resultDiv.className = 'result success';
+                        resultContent.innerHTML = `
+                            <p>✅ Upload successful!</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        `;
+                        
+                        // Show image preview
+                        previewImg.src = data.url;
+                        imagePreview.style.display = 'block';
+                    } else {
+                        resultDiv.className = 'result error';
+                        resultContent.innerHTML = `
+                            <p>❌ Upload failed</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        `;
+                    }
+                } catch (error) {
+                    resultDiv.className = 'result error';
+                    resultContent.innerHTML = `
+                        <p>❌ Error during upload</p>
+                        <pre>${error.message}</pre>
+                    `;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
